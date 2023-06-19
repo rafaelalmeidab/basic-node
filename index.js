@@ -28,22 +28,14 @@ app.get('/', (req, res) => {
 
 app.get('/api/:date?', (req, res) => {
 
-  var dateParam = req.url.split('/').pop();
-  console.log(dateParam);
-  var obj = '';
-  const currentDate = new Date(dateParam);
-  console.log(currentDate instanceof Date);
+  var dateParam   = req.url.split('/').pop();
+  var currentDate = new Date(dateParam);
   
-  if(currentDate.toString() == 'Invalid Date'){
-    obj = { error: currentDate.toString()};
-    dateParam = JSON.stringify(obj);
+  if(Date.parse(currentDate.toString()) == "Invalid Date"){
+    dateParam = JSON.stringify({ error: currentDate.toString() });
   }
   else{
-    const utcTimestamp = currentDate.getTime();
-    const gmtDateTime  = currentDate.toUTCString();
-  
-    obj = { unix: utcTimestamp, utc: gmtDateTime};
-    dateParam = JSON.stringify(obj);
+    dateParam = JSON.stringify({ unix: (currentDate.getTime()), utc: (currentDate.toUTCString()) });
   }
   
   res.send(dateParam);
